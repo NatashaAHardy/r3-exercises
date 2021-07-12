@@ -1,0 +1,245 @@
+---
+title: "Manipulate"
+author: "Natasha Hardy & Ben Best"
+date: "12/07/2021"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: "show"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About
+
+Tutorial for data manipulation here: https://noaa-iea.github.io/r3-train/manipulate.html
+
+## Read online table
+
+Please visit the ERDDAP server https://oceanview.pfeg.noaa.gov/erddap and please do a Full Text Search for Datasets using “cciea” in the text box before clicking Search. These are all the California Current IEA datasets.
+
+From the listing of datasets, please click on data for the “CCIEA Anthropogenic Drivers” dataset.
+
+Note the filtering options for time and other variables like consumption_fish (Millions of metric tons) and cps_landings_coastwide (1000s metric tons). Set the time filter from being only the most recent time to the entire range of available time from 1945-01-01 to 2020-01-01.
+
+Scroll to the bottom and Submit with the default .htmlTable view. You get an web table of the data. Notice the many missing values in earlier years.
+
+Go back in your browser to change the the File type to .csv. Now instead of clicking Submit, click on Just generate the URL. Although the generated URL lists all variables to include, the default is to do that, so we can strip off everything after the .csv, starting with the query parameters ? .
+
+### Download table (`*.csv`)
+
+```{r Download csv}
+
+# set variables
+csv_url  <- "https://oceanview.pfeg.noaa.gov/erddap/tabledap/cciea_AC.csv"
+# if ERDDAP server down (Error in download.file) with URL above, use this:
+#    csv_url <- "https://raw.githubusercontent.com/noaa-iea/r3-train/master/data/cciea_AC.csv"
+dir_data <- "data"
+
+# derived variables
+csv <- file.path(dir_data, basename(csv_url))
+
+# create directory
+dir.create(dir_data, showWarnings = F)
+
+# download file
+if (!file.exists(csv))
+  download.file(csv_url, csv)
+
+```
+
+### Read table `read.csv()`
+
+Read in data
+
+```{r Read in data}
+
+# attempt to read csv
+d <- read.csv(csv)
+
+# show the data frame
+d
+
+```
+
+Read in, clean and update data.
+
+```{r Read in, clean and update data}
+# read csv by skipping first two lines, so no header
+d <- read.csv(csv, skip = 2, header = FALSE)
+d
+
+# update data frame to original column names
+names(d) <- names(read.csv(csv))
+d
+
+# update for future reuse (NEW!)
+write.csv(d, csv, row.names = F)
+
+```
+
+
+
+### Show table `DT::datatable()`
+
+```{r Show table}
+
+# show table
+DT::datatable(d)
+
+```
+```{r Load package and alternative code}
+
+library(DT)
+datatable(d)
+
+```
+
+## Wrangle data
+
+### Manipulate with `dplyr`
+
+There’s a few things we’ll want to do next to make this data.frame more usable:
+
+Convert the data.frame to a tibble, which provides a more useful summary in the default output of the R Console to include only the first 10 rows of data and the data types for each column.
+
+Transform the time column to an actual as.Date() column using dplyr’s mutate().
+
+Column select with dplyr’s select() to those starting with “total_fisheries_revenue” using starts_with().
+
+Row select with dplyr’s filter() to those starting within the last 40 years, i.e. time >= as.Date("1981-01-01").
+
+```{r install packages}
+
+library(DT)
+library(dplyr)
+library(tidyr)
+library(purrr)
+
+```
+
+```{r Data manip}
+
+d <- d %>% 
+  # tibble
+  tibble() %>% 
+  # mutate time
+  mutate(
+    time = as.Date(substr(time, 1, 10))) %>% 
+  # select columns
+  select(
+    time, 
+    starts_with("total_fisheries_revenue")) %>% 
+  # filter rows
+  filter(
+    time >= as.Date("1981-01-01"))
+
+datatable(d)
+
+```
+
+### Tidy with `tidyr`
+
+```{r Tidying up}
+
+d <- d %>% 
+  pivot_longer(-time)
+
+datatable(d)
+```
+
+### Summarize with `dplyr`
+
+Now that we have the data in long format, we can:
+
+Mutate a new region from the original full column name by using stringr’s str_replace() function.
+
+Select for just the columns of interest (we no longer need name).
+
+Summarize by region, which we want to first group_by(), then summarize() the mean() of value to a new column avg_revenue).
+
+Format the avg_revenue as a currency with DT’s formatCurrency()).
+
+```{r Manipulating that data}
+
+library(stringr)
+
+d <- d %>% 
+  mutate(
+    region = str_replace(name, "total_fisheries_revenue_", "")) %>% 
+  select(time, region, value)
+datatable(d)
+
+```
+
+```{r Summarising data}
+
+d_sum <- d %>% 
+  group_by(region) %>% 
+  summarize(
+    avg_revenue = mean(value))
+
+datatable(d_sum) %>% 
+  formatCurrency("avg_revenue")
+
+```
+
+### Apply functions with `purrr` on a `nest`'ed `tibble`
+
+One of the major innovations of a tibble is the ability to store nearly any object in the cell of a table as a list column. This could be an entire table, a fitted model, plot, etc. Let’s try out these features driven by the question: What’s the trend over time for fishing revenue by region?
+
+The creation of tables within cells is most commonly done with tidyr’s nest() function based on a grouping of values in a column, i.e. dplyr’s group_by().
+
+The purrr R package provides functions to operate on list objects, in this case the nested data. and application of functions on these data with purrr’s map function. We can feed the data object into an anonymous function where we fit the linear model lm() and return a list object. To then extract the coefficient from the model coef(summary()), we want to return a type of double (not another list object), so we use the map_dbl() function.
+
+```{r Grouping data with cells}
+
+n <- d %>% 
+  group_by(region) %>% 
+  nest(
+    data = c(time, value))
+n
+
+```
+
+```{r Grouping more data}
+
+n <- n %>% 
+  mutate(
+    lm    = map(data, function(d){
+      lm(value ~ time, d) } ),
+    trend = map_dbl(lm, function(m){
+      coef(summary(m))["time","Estimate"] }))
+n
+
+```
+
+```{r View these data}
+
+n %>% 
+  select(region, trend) %>% 
+  datatable()
+
+
+```
+
+## Rmarkdown output options
+
+If you’d like to render your Rmarkdown into HTML with a table of contents (toc), showing up to 3rd level headings (i.e. ### Heading; use toc_depth: 3) and have a floating menu (toc_float), along with the ability to Show (or Hide) your Code Chunks (code_folding), then replace this default front matter yaml:
+
+output: html_document
+with:
+
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: "show"
+    
+For details, see 3.1 HTML document | R Markdown: The Definitive Guide.
+

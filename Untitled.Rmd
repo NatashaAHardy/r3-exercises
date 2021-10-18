@@ -1,0 +1,189 @@
+---
+title: "Visualise"
+author: "Natasha Hardy & Ben Best"
+date: "18/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About
+
+Tutorial for data manipulation here: https://noaa-iea.github.io/r3-train/visualize.html
+
+## 3.1 Read Data
+
+
+Picking up with the table we downloaded last time (2.1.4 Read table read.csv()), let’s read the data directly from the URL and use readr’s read_csv():
+
+```{r Read Data}
+
+# libraries
+library(here)
+library(readr)
+library(DT)
+
+
+# variables
+url_ac <- "https://oceanview.pfeg.noaa.gov/erddap/tabledap/cciea_AC.csv"
+# if ERDDAP server down (Error in download.file) with URL above, use this:
+#    url_ac <- "https://raw.githubusercontent.com/noaa-iea/r3-train/master/data/cciea_AC.csv"
+csv_ac <- here("data/cciea_AC.csv")
+
+# download data
+if (!file.exists(csv_ac))
+  download.file(url_ac, csv_ac)
+
+# read data
+d_ac        <- read_csv(csv_ac, col_names = F, skip = 2)
+names(d_ac) <- names(read_csv(csv_ac))
+
+# show data
+datatable(d_ac)
+
+```
+
+Note the use of functions in libraries here and readr that you may need to install from the Packages pane in RStudio.
+
+There here::here() function starts the path based on looking for the *.Rproj file in the current working directory or higher level folder. In this case it should be the same folder as your current working directory so seems unnecessary, but it’s good practice for other situations in which you start running Rmarkdown files stored in subfolders (in which case the evaluating R Chunks assume the working directory of the .Rmd).
+
+I prefer readr::read_csv() over read.csv() since columns of character type are not converted to type factor by default. It will also default to being read in as a tibble rather than just a data.frame.
+
+## 3.2 Plot statically with ggplot2
+
+## 3.2.1 Simple line plot + geom_line()
+
+Let’s start with a simple line plot of total_fisheries_revenue_coastwide (y axis) over time (x axis) using the grammar of graphics principles by:
+
+Feed the data as the first argument to ggplot().
+Set up the aesthetics aes() as the second argument for specifying the dimensions of the plot (x and y).
+Add (+) the geometry, or plot type.
+From the Data Visualization with ggplot2 Cheatsheet (RStudio menu Help > Cheat Sheets), we have these aesthetics to plot based on the value being continuous
+
+
+```{r Select Data}
+
+library(dplyr)
+library(ggplot2)
+
+# subset data
+d_coast <- d_ac %>% 
+  # select columns
+  select(time, total_fisheries_revenue_coastwide) %>% 
+  # filter rows
+  filter(!is.na(total_fisheries_revenue_coastwide))
+datatable(d_coast)
+
+```
+
+```{r Simple line plot}
+
+# ggplot object
+p_coast <- d_coast %>% 
+  # setup aesthetics
+  ggplot(aes(x = time, y = total_fisheries_revenue_coastwide)) +
+  # add geometry
+  geom_line()
+
+# show plot
+p_coast
+
+```
+
+
+## 3.2.2 Trend line + geom_smooth()
+
+Add a smooth layer based on a linear model (method = "lm").
+
+```{r Add smooth layer}
+
+p_coast + 
+  geom_smooth(method = "lm")
+
+```
+
+Try changing the method argument by looking at the help documentation ?geom_smooth.
+
+
+## 3.2.3 Distribution of values + geom_histogram()
+
+What if you want to look at a distribution of the values? For instance, you might simulate future revenues by drawing from this distribution, in which case you would want to use geom_histogram().
+
+```{r Data distribution}
+
+d_coast %>% 
+  # setup aesthetics
+  ggplot(aes(x = total_fisheries_revenue_coastwide)) +
+  # add geometry
+  geom_histogram()
+
+```
+
+
+Try changing the binwidth parameter.
+
+
+## 3.2.4 Series line plot aes(color = region)
+
+Next, let’s also show the other regional values (CA, OR and WA; not coastwide) in the plot as a series with different colors. To do this, we’ll want to tidy the data into long format so we can have a column for total_fisheries_revenue and another region column to supply as the group and color aesthetics based on aesthetics we see are available for geom_line():
+
+```{r Data manip fisheries revenue category}
+
+library(stringr)
+library(tidyr)
+
+d_rgn <- d_ac %>% 
+  # select columns
+  select(
+    time, 
+    starts_with("total_fisheries_revenue")) %>% 
+  # exclude column
+  select(-total_fisheries_revenue_coastwide) %>% 
+  # pivot longer
+  pivot_longer(-time) %>% 
+  # mutate region by stripping other
+  mutate(
+    region = name %>% 
+      str_replace("total_fisheries_revenue_", "") %>% 
+      str_to_upper()) %>% 
+  # filter for not NA
+  filter(!is.na(value)) %>% 
+  # select columns
+  select(time, region, value)
+  
+# create plot object
+p_rgn <- ggplot(
+  d_rgn,
+  # aesthetics
+  aes(
+    x     = time, 
+    y     = value,
+    group = region,
+    color = region)) +
+  # geometry
+  geom_line()
+
+# show plot
+p_rgn
+
+```
+
+
+## 3.2.5 Update labels + labs()
+
+Next, let’s update the labels for the title, x and y axes, and the color legend:
+
+```{r Edit labels}
+
+p_rgn <- p_rgn +
+  labs(
+    title  = "Fisheries Revenue",
+    x      = "Year",
+    y      = "Millions $ (year 2015)",
+    color  = "Region")
+p_rgn
+
+```
+

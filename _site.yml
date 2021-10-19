@@ -12,4 +12,10 @@ navbar:
       href: visualize.html
     - text: "Map"
       href: map.html
+    - text: "Report"
+      href: report.html
+    - text: "Infographics"
+      href: infograhics.html
+    - text: "Applications"
+      href: applications.html
 output_dir: "."

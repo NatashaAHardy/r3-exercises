@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 https://noaa-iea.github.io/r3-train/map.html
 
-## 3.1 Read Spatial Data
+## 1. Read Spatial Data
 
 Open your r3-exercises.Rproj to launch RStudio into that project and set the working directory.
 
@@ -26,7 +26,7 @@ Create a new Rmarkdown file (RStudio menu File > New file > Rmarkdown…) called
 
 I’ll be copy/pasting during the demonstration but I encourage you to type out the text to enhance understanding.
 
-### 3.1.1 Install packages
+### 1.1 Install packages
 
 ```{r Install packages}
 
@@ -45,7 +45,7 @@ shelf(
 
 ```
 
-## 3.2 Get spatial data
+## 2. Get spatial data
 
 ```{r Get spatial data}
 
@@ -96,12 +96,12 @@ leaflet() %>%
 ```
 
 
-## 3.3 Group by
+## 3. Group by
 
 sf is “tidy”
 
 
-## 3.4 Extract from erddap
+## 4. Extract from erddap
 
 ERDDAP - Multi-scale Ultra-high Resolution (MUR) SST Analysis fv04.1, Global, 0.01°, 2002-present, Monthly - Data Access Form
 
@@ -222,6 +222,7 @@ names(sst_stk) <- strftime(sst_tbl_mo$date, "sst_%Y.%m")
 raster::crs(sst_stk) <- 4326
 
 ```
+
 
 ```{r More spatial data manip}
 

@@ -11,25 +11,69 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+#Can set global parameters here
+
 ```
 
-## R Markdown
+## 1. Rmd Website
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+- How to create website / webpages using Rmarkdown: https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+- Ben Best's tutorial discusses some key points: https://www.youtube.com/watch?v=kPoBnWY4xqg
 
-```{r cars}
-summary(cars)
-```
+- Note that most of the rendering is done 'under the hood' by *pandoc* and this is underwritten in a different programming language, which can be useful to know if wanting to parse some pandoc specific arguments.
 
-## Including Plots
 
-You can also embed plots, for example:
+### 1.1 Source:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+- Example: Alaska Marine Ecosystem Status Reports -- https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/Index.php?ID=3
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+- Example: REEM Ecosystem Considerations and Assessment: https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/dataWindow.php?Data=NPI
+
+
+### 1.2 Parameterize Rmd
+
+We can render multiple pages and ideally automatically with GitHub Actions.
+
+- 15.1 Declaring parameters | R Markdown: The Definitive Guide: https://bookdown.org/yihui/rmarkdown/params-declare.html
+
+- 17.4 Parameterized reports | R Markdown Cookbook
+
+## 2. Parameters
+
+Note on options:
+
+output:
+  html_document: 
+    toc: yes
+    toc_float: true
+    code_folding: hide        #includes a button to show code
+    number_sections: yes
+    
+Note on function:
+rmarkdown::kable() takes a figure item (i.e., from a chunk named "pressure") and turns into table format.
+    
+### Automatic generation with Github Action
+
+bbest/gh-actions-demo: Demonstration of using Github Actions to update your Rmarkdown analysis
+
+Automatically Update your Report with Github Actions
+
+gh-action-test-rmd/render-rmarkdown.yaml at main · bbest/gh-action-test-rmd
+
+Events that trigger workflows - GitHub Docs
+
+actions/README.md at master · r-lib/actions
+
+## 3. Flexdashboard
+
+Another example source: table of ships to ship detail.
+
+4.3.1 Synchronize time selection in dygraphs
+Synchronization
+4.4 Organizing with _child documents
+Further Resources
+Formats
+R Markdown Format for Flexible Dashboards • flexdashboard
+Reproducible Research in R

@@ -18,4 +18,6 @@ navbar:
       href: infograhics.html
     - text: "Applications"
       href: applications.html
+    - text: "Dashboard"
+      href: "test-flex-dashboard.html"
 output_dir: "."

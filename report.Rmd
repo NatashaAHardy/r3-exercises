@@ -18,31 +18,36 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 
 ## 1. Rmd Website
 
-- How to create website / webpages using Rmarkdown: https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html
+- [How to create website / webpages using Rmarkdown](https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html)
 
-- Ben Best's tutorial discusses some key points: https://www.youtube.com/watch?v=kPoBnWY4xqg
+- [Ben Best's tutorial discusses some key points](https://www.youtube.com/watch?v=kPoBnWY4xqg)
+
+- [Tutorial essentials](https://noaa-iea.github.io/r3-train/report.html)
 
 - Note that most of the rendering is done 'under the hood' by *pandoc* and this is underwritten in a different programming language, which can be useful to know if wanting to parse some pandoc specific arguments.
 
+- [Code here](https://github.com/bbest/r3-exercises/tree/main/report-website)
+
+- Note "make_pages" and "make_data" documents
 
 ### 1.1 Source:
 
-- Example: Alaska Marine Ecosystem Status Reports -- https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/Index.php?ID=3
+- Example: [Alaska Marine Ecosystem Status Reports](https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/Index.php?ID=3)
 
-- Example: REEM Ecosystem Considerations and Assessment: https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/dataWindow.php?Data=NPI
+- Example: [REEM Ecosystem Considerations and Assessment](https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/dataWindow.php?Data=NPI)
 
 
 ### 1.2 Parameterize Rmd
 
 We can render multiple pages and ideally automatically with GitHub Actions.
 
-- 15.1 Declaring parameters | R Markdown: The Definitive Guide: https://bookdown.org/yihui/rmarkdown/params-declare.html
+- [15.1 Declaring parameters | R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/params-declare.html)
 
-- 17.4 Parameterized reports | R Markdown Cookbook
+- [17.4 Parameterized reports | R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/parameterized-reports.html)
 
-## 2. Parameters
+- [Parameters](https://rmarkdown.rstudio.com/lesson-6.html)
 
-Note on options:
+**Note on options:**
 
 output:
   html_document: 
@@ -51,29 +56,48 @@ output:
     code_folding: hide        #includes a button to show code
     number_sections: yes
     
-Note on function:
-rmarkdown::kable() takes a figure item (i.e., from a chunk named "pressure") and turns into table format.
+**Note on function:**
+
+- rmarkdown::kable() takes a figure item (i.e., from a chunk named "pressure") and turns into table format.
+
+**Note on flexdashboard:**
+
+- Get install.packages("flexdashboard") type of template doc in rmarkdown 'template' options
+
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    
     
 ### Automatic generation with Github Action
 
-bbest/gh-actions-demo: Demonstration of using Github Actions to update your Rmarkdown analysis
+- bbest/gh-actions-demo: [Demonstration of using Github Actions to update your Rmarkdown analysis](https://github.com/bbest/gh-actions-demo) 
 
-Automatically Update your Report with Github Actions
+- [Automatically Update your Report with Github Actions](https://bbest.github.io/gh-actions-demo/#1)
 
-gh-action-test-rmd/render-rmarkdown.yaml at main · bbest/gh-action-test-rmd
+- gh-action-test-rmd/render-rmarkdown.yaml at main · [bbest/gh-action-test-rmd](https://github.com/bbest/gh-action-test-rmd/blob/main/.github/workflows/render-rmarkdown.yaml)
 
-Events that trigger workflows - GitHub Docs
+- [Events that trigger workflows - GitHub Docs](https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#schedule)
 
-actions/README.md at master · r-lib/actions
+- [actions/README.md at master · r-lib/actions](https://github.com/r-lib/actions/blob/master/examples/README.md) 
 
 ## 3. Flexdashboard
 
-Another example source: table of ships to ship detail.
+Another example [source](https://github.com/BenioffOceanInitiative/ship-cards): [table of ships](https://benioffoceaninitiative.github.io/ship-cards/) to [ship detail](https://benioffoceaninitiative.github.io/ship-cards/ship/CARNIVAL%20IMAGINATION.html).
 
-4.3.1 Synchronize time selection in dygraphs
-Synchronization
-4.4 Organizing with _child documents
-Further Resources
-Formats
-R Markdown Format for Flexible Dashboards • flexdashboard
-Reproducible Research in R
+**Synchronize time selection in dygraphs**
+
+- [Synchronization](https://rstudio.github.io/dygraphs/gallery-synchronization.html)
+
+## 4. Organizing with _child documents
+
+## Further Resources
+
+- [Formats](https://rmarkdown.rstudio.com/formats.html)
+
+- R Markdown Format for Flexible Dashboards: [flexdashboard](https://pkgs.rstudio.com/flexdashboard/index.html)
+
+- [Reproducible Research in R](https://monashdatafluency.github.io/r-rep-res/)
+
+•

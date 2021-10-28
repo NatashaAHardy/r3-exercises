@@ -37,3 +37,7 @@ output_dir: "."
 - Go to project's [GitHub R3 exercises](https://github.com/NatashaAHardy/r3-exercises) to check all the files are in order
 
 - Go to 'main' local branch, and in Terminal shell git merge rmd-website
+
+- In 'main' commit and push changes
+
+- These should propapage to your website.

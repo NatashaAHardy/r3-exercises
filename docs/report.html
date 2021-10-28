@@ -373,24 +373,73 @@ div.tocify {
 </div>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="rmd-website" class="section level2">
+<h2>1. Rmd Website</h2>
+<ul>
+<li><p><a href="https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html">How to create website / webpages using Rmarkdown</a></p></li>
+<li><p><a href="https://www.youtube.com/watch?v=kPoBnWY4xqg">Ben Best’s tutorial discusses some key points</a></p></li>
+<li><p><a href="https://noaa-iea.github.io/r3-train/report.html">Tutorial essentials</a></p></li>
+<li><p>Note that most of the rendering is done ‘under the hood’ by <em>pandoc</em> and this is underwritten in a different programming language, which can be useful to know if wanting to parse some pandoc specific arguments.</p></li>
+<li><p><a href="https://github.com/bbest/r3-exercises/tree/main/report-website">Code here</a></p></li>
+<li><p>Note “make_pages” and “make_data” documents</p></li>
+</ul>
+<div id="source" class="section level3">
+<h3>1.1 Source:</h3>
+<ul>
+<li><p>Example: <a href="https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/Index.php?ID=3">Alaska Marine Ecosystem Status Reports</a></p></li>
+<li><p>Example: <a href="https://apps-afsc.fisheries.noaa.gov/refm/reem/ecoweb/dataWindow.php?Data=NPI">REEM Ecosystem Considerations and Assessment</a></p></li>
+</ul>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="report_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="parameterize-rmd" class="section level3">
+<h3>1.2 Parameterize Rmd</h3>
+<p>We can render multiple pages and ideally automatically with GitHub Actions.</p>
+<ul>
+<li><p><a href="https://bookdown.org/yihui/rmarkdown/params-declare.html">15.1 Declaring parameters | R Markdown: The Definitive Guide</a></p></li>
+<li><p><a href="https://bookdown.org/yihui/rmarkdown-cookbook/parameterized-reports.html">17.4 Parameterized reports | R Markdown Cookbook</a></p></li>
+<li><p><a href="https://rmarkdown.rstudio.com/lesson-6.html">Parameters</a></p></li>
+</ul>
+<p><strong>Note on options:</strong></p>
+<p>output: html_document: toc: yes toc_float: true code_folding: hide #includes a button to show code number_sections: yes</p>
+<p><strong>Note on function:</strong></p>
+<ul>
+<li>rmarkdown::kable() takes a figure item (i.e., from a chunk named “pressure”) and turns into table format.</li>
+</ul>
+<p><strong>Note on flexdashboard:</strong></p>
+<ul>
+<li>Get install.packages(“flexdashboard”) type of template doc in rmarkdown ‘template’ options</li>
+</ul>
+<p>output: flexdashboard::flex_dashboard: orientation: columns vertical_layout: fill</p>
+</div>
+<div id="automatic-generation-with-github-action" class="section level3">
+<h3>Automatic generation with Github Action</h3>
+<ul>
+<li><p>bbest/gh-actions-demo: <a href="https://github.com/bbest/gh-actions-demo">Demonstration of using Github Actions to update your Rmarkdown analysis</a></p></li>
+<li><p><a href="https://bbest.github.io/gh-actions-demo/#1">Automatically Update your Report with Github Actions</a></p></li>
+<li><p>gh-action-test-rmd/render-rmarkdown.yaml at main · <a href="https://github.com/bbest/gh-action-test-rmd/blob/main/.github/workflows/render-rmarkdown.yaml">bbest/gh-action-test-rmd</a></p></li>
+<li><p><a href="https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#schedule">Events that trigger workflows - GitHub Docs</a></p></li>
+<li><p><a href="https://github.com/r-lib/actions/blob/master/examples/README.md">actions/README.md at master · r-lib/actions</a></p></li>
+</ul>
+</div>
+</div>
+<div id="flexdashboard" class="section level2">
+<h2>3. Flexdashboard</h2>
+<p>Another example <a href="https://github.com/BenioffOceanInitiative/ship-cards">source</a>: <a href="https://benioffoceaninitiative.github.io/ship-cards/">table of ships</a> to <a href="https://benioffoceaninitiative.github.io/ship-cards/ship/CARNIVAL%20IMAGINATION.html">ship detail</a>.</p>
+<p><strong>Synchronize time selection in dygraphs</strong></p>
+<ul>
+<li><a href="https://rstudio.github.io/dygraphs/gallery-synchronization.html">Synchronization</a></li>
+</ul>
+</div>
+<div id="organizing-with-_child-documents" class="section level2">
+<h2>4. Organizing with _child documents</h2>
+</div>
+<div id="further-resources" class="section level2">
+<h2>Further Resources</h2>
+<ul>
+<li><p><a href="https://rmarkdown.rstudio.com/formats.html">Formats</a></p></li>
+<li><p>R Markdown Format for Flexible Dashboards: <a href="https://pkgs.rstudio.com/flexdashboard/index.html">flexdashboard</a></p></li>
+<li><p><a href="https://monashdatafluency.github.io/r-rep-res/">Reproducible Research in R</a></p></li>
+</ul>
+<p>•</p>
 </div>
 
 

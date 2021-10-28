@@ -283,6 +283,29 @@ $(document).ready(function () {
 
 
 <p>Like branches of a tree.</p>
+<p><strong>Key Steps</strong></p>
+<ul>
+<li><p><a href="https://noaa-iea.github.io/r3-train/collaborate.html">Ben Best’s tutorial page</a></p></li>
+<li><p>Work from your rmd-website local forked branch</p></li>
+<li><p>Make sure your _site.yml doc reflects the pages and parameters you need</p></li>
+</ul>
+<pre class="r"><code>name: &quot;R&lt;sup&gt;3&lt;/sup&gt;&quot;
+navbar:
+  title: &quot;R&lt;sup&gt;3&lt;/sup&gt; Exercises&quot;
+  left:
+    - text: &quot;Home&quot;
+      href: index.html
+    - text: &quot;Collaborate&quot;
+      href: collaborate.html
+output_dir: &quot;.&quot;</code></pre>
+<ul>
+<li><p>Make sure each document (here “index.html” and “collaborate.html” exist in the “docs” which you setup as your website directory)</p></li>
+<li><p>rmarkdown::render_site()</p></li>
+<li><p>In my case, move everything but the .rmd files into “/docs”</p></li>
+<li><p>Commit and push changes</p></li>
+<li><p>Go to project’s <a href="https://github.com/NatashaAHardy/r3-exercises">GitHub R3 exercises</a> to check all the files are in order</p></li>
+<li></li>
+</ul>
 
 
 

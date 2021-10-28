@@ -4,6 +4,13 @@ title: "Collaborate"
 
 Like branches of a tree.
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+#Can set global parameters here
+
+```
+
+
 **Key Steps**
 
 - [Ben Best's tutorial page](https://noaa-iea.github.io/r3-train/collaborate.html)
@@ -28,7 +35,13 @@ output_dir: "."
 
 - Make sure each document (here "index.html" and "collaborate.html" exist in the "docs" which you setup as your website directory)
 
-- rmarkdown::render_site()
+- Render your site
+
+```{r Render, eval=FALSE}
+
+rmarkdown::render_site()
+
+```
 
 - In my case, move everything but the .rmd files into "/docs"
 
@@ -37,3 +50,7 @@ output_dir: "."
 - Go to project's [GitHub R3 exercises](https://github.com/NatashaAHardy/r3-exercises) to check all the files are in order
 
 - Go to 'main' local branch, and in Terminal shell git merge rmd-website
+
+- In 'main' commit and push changes
+
+- These should propapage to your website.

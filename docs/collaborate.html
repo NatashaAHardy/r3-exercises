@@ -300,11 +300,16 @@ navbar:
 output_dir: &quot;.&quot;</code></pre>
 <ul>
 <li><p>Make sure each document (here “index.html” and “collaborate.html” exist in the “docs” which you setup as your website directory)</p></li>
-<li><p>rmarkdown::render_site()</p></li>
+<li><p>Render your site</p></li>
+</ul>
+<pre class="r"><code>rmarkdown::render_site()</code></pre>
+<ul>
 <li><p>In my case, move everything but the .rmd files into “/docs”</p></li>
 <li><p>Commit and push changes</p></li>
 <li><p>Go to project’s <a href="https://github.com/NatashaAHardy/r3-exercises">GitHub R3 exercises</a> to check all the files are in order</p></li>
-<li></li>
+<li><p>Go to ‘main’ local branch, and in Terminal shell git merge rmd-website</p></li>
+<li><p>In ‘main’ commit and push changes</p></li>
+<li><p>These should propapage to your website.</p></li>
 </ul>
 
 

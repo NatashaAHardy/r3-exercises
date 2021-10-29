@@ -42,19 +42,20 @@ Please close and restart all instances of RStudio before proceeding in order to 
 
 Please open RStudio by double-clicking on your r3-exercises.Rproj file to set your working directory. In the menu File -> New Project…, New Directory, then Infographiq Project Template:
 
-
-
 If you don’t see this option, then you presumably need to install infographiqR AND restart RStudio per the previous step.
 
-Then: 1) specify a directory like infographiq-project inside your r3-exercises folder; and 2) tick Open in a new session; before clicking Create Project:
+Then: 
 
+1) specify a directory like infographiq-project inside your r3-exercises folder; and 
 
+2) tick Open in a new session; before clicking Create Project:
 
-RStudio should open to a new session with the Source and Files panes looking like so:
+Note that we'll be using a parameterised Rmarkdown with params > 'svg' and 'csv'
 
+RStudio should open to a new session with the Source and Files panes.
 
+### 6.2.1 Notice Report techniques of index.Rmd
 
-6.2.1 Notice Report techniques of index.Rmd
 Do you notice two Report techniques in index.Rmd that we discussed last week?
 
 Parameters params in the frontmatter to specify the infographic’s two key inputs: 1) svg of the scalable vector graphic illustration; and 2) csv table matching the icon with the modal window content to open.
